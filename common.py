@@ -1,4 +1,4 @@
-__author__ = 'Ruben'
+__author__ = 'mancuniancol'
 import re 
 import xbmcaddon
 import xbmc
@@ -13,8 +13,7 @@ class Settings:
         self.language = self.settings.getSetting('language')
         self.extra = self.settings.getSetting('extra')
         self.time_noti = int(self.settings.getSetting('time_noti'))
-        max_magnets = self.settings.getSetting('max_magnets')
-        self.max_magnets = int(max_magnets) if max_magnets is not '' else 10  # max_magnets
+        self.max_magnets = int(self.settings.getSetting('max_magnets'))  # max_magnets
 
 class Browser:
     def __init__(self):
