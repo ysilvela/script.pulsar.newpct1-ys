@@ -11,9 +11,10 @@ browser = common.Browser()
 # create the filters
 filters = common.Filtering()
 
+
 # using function from Steeve to add Provider's name and search torrent
 def extract_torrents(data):
-    #try:
+    try:
         filters.information()  # print filters settings
         data = common.clean_html(data)
         cont = 0
@@ -27,8 +28,9 @@ def extract_torrents(data):
             if cont == settings.max_magnets:  # limit magnets
                 break
         provider.log.info('>>>>>>' + str(cont) + ' torrents sent to Pulsar<<<<<<<')
-    #except:
-    #    provider.log.error('>>>>>>>ERROR parsing data<<<<<<<')
+    except:
+        provider.log.error('>>>>>>>ERROR parsing data<<<<<<<')
+
 
 def search(query):
     global filters
@@ -45,10 +47,12 @@ def search(query):
         results = []
     return results
 
+
 def search_movie(info):
     filters.use_movie()
     query = common.translator(info['imdb_id'], 'es') #define query in spanish
     return search(query)
+
 
 def search_episode(info):
     filters.use_TV()
