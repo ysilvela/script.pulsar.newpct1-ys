@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="script.pulsar.newpct1-ys" name="Pulsar MC's NewPtc1 (Español) Provider" version="0.0.1" provider-name="ysilvela">
+<addon id="script.pulsar.newpct1-ys" name="Pulsar YS's NewPtc1 (Español) Provider" version="0.0.1" provider-name="ysilvela">
 	<requires>
 		<import addon="xbmc.python" version="2.12.0"/>
         <import addon="plugin.video.pulsar" version="0.3.1"/>
