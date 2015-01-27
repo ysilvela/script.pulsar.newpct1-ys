@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
 	<category label="General">
-		<setting label="URL address (http://example.com):" type="text" id="url_address" default="http://www.elitetorrent.net"/>
+		<setting label="URL address (http://example.com):" type="text" id="url_address" default="http://www.newpct1.com"/>
 		<setting label="Extra Keywords to send in the URL" type="lsep"/>
 		<setting label="Extra Keywords:" type="text" id="extra" default=""/>
 		<setting label="Notification Message" type="lsep"/>
