@@ -18,26 +18,26 @@ def extract_torrents(data, query):
         filters.information()  # Pintamos las opciones de filtrado en el log
         data = common.clean_html(data) # Elimina los comentarios que haya ('<!--(.*?)-->')
         cont = 0
-        last_item = ""
+        last_item = ''
         pattern = r'<a\shref=[\'"]?([^\'" >]+%s)' % query
         for cm,item in enumerate(re.findall(pattern, data)): #http://www.newpct1.com/descarga-torrent/pelicula/interstellar/
-            if last_item != item:
+            if last_item != item or last_item='':
                 next_url = item.replace(".com/",".com/descarga-torrent/") + "/"
                 browser.open(next_url)
-                print "Next Url : " + next_url
+                provider.log.info('Next Url : ' + next_url)
                 data_next = browser.content
                 pattern_next = '<a href="([^"]+)" title="[^"]+" class="btn-torrent" target="_blank">'
                 # Con el patron anterior obtengo <a href="http://tumejorjuego.com/download/index.php?link=descargar-torrent/058310_yo-frankenstein-blurayrip-ac3-51.html" title="Descargar torrent de Yo Frankenstein " class="btn-torrent" target="_blank">Descarga tu Archivo torrent!</a>
 
                 link =re.findall(pattern_next,data_next)
-                provider.log.info("Link : " + link[0])
+                provider.log.info('Link : ' + link[0])
                 partes = link[0].split("/")
                 cadena = partes[ len(partes)-1 ]
                 torrent = cadena.split("_")
-                provider.log.info("Torrent : " + torrent[0])
+                provider.log.info('Torrent : ' + torrent[0])
                 cadena = torrent[1].split(".")
                 titulo = cadena[0]
-                provider.log.info("Titulo : " + titulo)
+                provider.log.info('Titulo : ' + titulo)
         
                 if filters.verify(titulo, None):
                     yield {"name": titulo + ' - ' + settings.name_provider, "uri": link[0]}  # devuelve el torrent
