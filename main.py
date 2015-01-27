@@ -53,6 +53,7 @@ def search(query):
 def search_movie(info):
     filters.use_movie()
     query = common.translator(info['imdb_id'], 'es') #define query in spanish
+    provider.log.error('Query extracted using IMDB: %s' % query)
     return search(query)
 
 
