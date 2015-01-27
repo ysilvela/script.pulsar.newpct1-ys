@@ -12,7 +12,7 @@ browser = common.Browser()
 filters = common.Filtering()
 
 
-# using function from Steeve to add Provider's name and search torrent
+# Las siguientes funciones son invocadas desde Pulsar directamente
 def extract_torrents(data):
     try:
         filters.information()  # print filters settings
@@ -61,5 +61,5 @@ def search_episode(info):
     query =  common.clean(info['title']) + ' %dx%02d'% (info['season'],info['episode'])  # define query
     return search(query)
 
-# This registers your module for use
+# Hay que registar el modulo para poderlo usar
 provider.register(search, search_movie, search_episode)
