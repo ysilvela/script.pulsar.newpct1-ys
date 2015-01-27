@@ -39,7 +39,7 @@ def search(query):
     query += ' ' + settings.extra
     if settings.time_noti > 0: provider.notify(message="Searching: " + query.encode('utf-8','ignore').title() + '...', header=None, time=settings.time_noti, image=settings.icon)
     query = provider.quote_plus(query.lstrip())
-    url_search = "%s/busqueda/%s/modo:listado/orden:valoracion" % (settings.url,query)
+    url_search = "%s/buscar/index.php?page=buscar&q=%s" % (settings.url,query)
     provider.log.info(url_search)
     if browser.open(url_search):
         results = extract_torrents(browser.content)
