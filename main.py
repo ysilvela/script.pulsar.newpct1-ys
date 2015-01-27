@@ -13,12 +13,13 @@ filters = common.Filtering()
 
 
 # Las siguientes funciones son invocadas desde Pulsar directamente
-def extract_torrents(data):
+def extract_torrents(data, query):
     try:
         filters.information()  # Pintamos las opciones de filtrado en el log
         data = common.clean_html(data) # Elimina los comentarios que haya ('<!--(.*?)-->')
         cont = 0
-        for cm, (torrent, name) in enumerate(re.findall(r'/torrent/(.*?)/(.*?)"', data)):
+        pattern = r'<a\shref=[\'"]?([^\'" >]+%s)' % query
+        for cm, (torrent, name) in enumerate(re.findall(pattern, data)):
             torrent = settings.url + '/get-torrent/' + torrent  # create torrent to send Pulsar
             if filters.verify(name, None):
                     yield {"name": name + ' - ' + settings.name_provider, "uri": torrent}  # return le torrent
@@ -42,7 +43,7 @@ def search(query):
     url_search = "%s/buscar/index.php?page=buscar&q=%s" % (settings.url,query)
     provider.log.info(url_search)
     if browser.open(url_search):
-        results = extract_torrents(browser.content)
+        results = extract_torrents(browser.content, query)
     else:
         provider.log.error('>>>>>>>%s<<<<<<<' % browser.status)
         provider.notify(message=browser.status, header=None, time=5000, image=settings.icon)
