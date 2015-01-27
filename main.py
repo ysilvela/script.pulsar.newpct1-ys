@@ -29,7 +29,7 @@ def extract_torrents(data):
                 break
         provider.log.info('>>>>>>' + str(cont) + ' torrents sent to Pulsar<<<<<<<')
     except:
-        provider.log.error('>>>>>>>ERROR parsing data<<<<<<<')
+        provider.log.error('>>>>>>>ERROR parsing data from newpct1<<<<<<<')
         provider.notify(message='ERROR parsing data', header=None, time=5000, image=settings.icon)
 
 
