@@ -15,10 +15,10 @@ filters = common.Filtering()
 # Las siguientes funciones son invocadas desde Pulsar directamente
 def extract_torrents(data):
     try:
-        filters.information()  # print filters settings
-        data = common.clean_html(data)
+        filters.information()  # Pintamos las opciones de filtrado en el log
+        data = common.clean_html(data) # Elimina los comentarios que haya ('<!--(.*?)-->')
         cont = 0
-        for cm, (torrent, name) in  enumerate(re.findall(r'/torrent/(.*?)/(.*?)"', data)):
+        for cm, (torrent, name) in enumerate(re.findall(r'/torrent/(.*?)/(.*?)"', data)):
             torrent = settings.url + '/get-torrent/' + torrent  # create torrent to send Pulsar
             if filters.verify(name, None):
                     yield {"name": name + ' - ' + settings.name_provider, "uri": torrent}  # return le torrent
