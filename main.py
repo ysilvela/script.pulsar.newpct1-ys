@@ -21,7 +21,7 @@ def extract_torrents(data, query):
         last_item = ''
         pattern = r'<a\shref=[\'"]?([^\'" >]+%s)' % query
         for cm,item in enumerate(re.findall(pattern, data)): #http://www.newpct1.com/descarga-torrent/pelicula/interstellar/
-            if last_item != item or last_item='':
+            if last_item != item or last_item=='':
                 next_url = item.replace(".com/",".com/descarga-torrent/") + "/"
                 browser.open(next_url)
                 provider.log.info('Next Url : ' + next_url)
