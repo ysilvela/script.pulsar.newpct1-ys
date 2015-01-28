@@ -25,12 +25,8 @@ def extract_torrents(data, query):
         provider.log.info('Patron : ' + pattern)
         if data=='': provider.log.info('Error. No vienen datos ' )
         for cm,item in enumerate(re.findall(pattern, data)): #http://www.newpct1.com/descarga-torrent/pelicula/interstellar/
-<<<<<<< HEAD
             provider.log.info('Hay iter')
             if last_item != item:
-=======
-            if last_item != item or last_item=='':
->>>>>>> origin/master
                 next_url = item.replace(".com/",".com/descarga-torrent/") + "/"
                 nombre = next_url.split("/")[4]
                 browser.open(next_url)
