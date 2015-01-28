@@ -15,14 +15,20 @@ filters = common.Filtering()
 # Las siguientes funciones son invocadas desde Pulsar directamente
 def extract_torrents(data, query):
     try:
+        query_re = query.replace("+","-")
+        provider.log.info('Query de busqueda : ' + query + " y query retocada : " + query_re)
         filters.information()  # Pintamos las opciones de filtrado en el log
         data = common.clean_html(data) # Elimina los comentarios que haya ('<!--(.*?)-->')
         cont = 0
         last_item = ''
-        pattern = r'<a\shref=[\'"]?([^\'" >]+%s)' % query
+        pattern = r'<a\shref=[\'"]?([^\'" >]+%s)' % query_re
+        provider.log.info('Patron : ' + pattern)
+        if data=='': provider.log.info('Error. No vienen datos ' )
         for cm,item in enumerate(re.findall(pattern, data)): #http://www.newpct1.com/descarga-torrent/pelicula/interstellar/
-            if last_item != item or last_item='':
+            provider.log.info('Hay iter')
+            if last_item != item:
                 next_url = item.replace(".com/",".com/descarga-torrent/") + "/"
+                nombre = next_url.split("/")[4]
                 browser.open(next_url)
                 provider.log.info('Next Url : ' + next_url)
                 data_next = browser.content
@@ -55,11 +61,12 @@ def extract_torrents(data, query):
 
 def search(query):
     global filters
+    query = query.lower()
     filters.title = query  # to do filtering by name
-    query += ' ' + settings.extra
+    if settings.extra <> '': query += ' ' + settings.extra
     if settings.time_noti > 0: provider.notify(message="Searching: " + query.encode('utf-8','ignore').title() + '...', header=None, time=settings.time_noti, image=settings.icon)
-    query = provider.quote_plus(query.lstrip())
-    url_search = "%s/buscar/index.php?page=buscar&q=%s&ordenar=Nombre&inon=Ascendente" % (settings.url,query)
+    query = provider.quote_plus(query.lstrip()) #Esto añade los %20 de los espacios    
+    url_search = "%s/index.php?page=buscar&q=%s&ordenar=Nombre&inon=Ascendente&idioma=1" % (settings.url,query)
     provider.log.info(url_search)
     if browser.open(url_search):
         results = extract_torrents(browser.content, query)
