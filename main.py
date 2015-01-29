@@ -31,7 +31,7 @@ def extract_torrents(data, query):
           for cm,(item,fecha,tam) in enumerate(re.findall(pattern, datos_lista)): #http://www.newpct1.com/descarga-torrent/peliculas/carretera-perdida-1997--en--blurayrip-ac3-5-1--peliculas
             nombre_largo = item.split("/")[4]
             provider.log.info("Nombre largo: " + nombre_largo)
-            if last_item != item and nombre_largo == query:
+            if last_item != item and nombre_largo == query.replace('+','-'):
                 provider.log.info('Item url : ' + item) 
                 next_url = item.replace(".com/",".com/descarga-torrent/")
                 next_url = next_url.replace('"','')
@@ -40,19 +40,22 @@ def extract_torrents(data, query):
                 nombre = next_url.split("/")[4]
                 browser.open(next_url)
                 provider.log.info('Next Url : ' + next_url)
-                print browser.status
+                provider.log.info('Status of browser request : ' + str(browser.status))
                 data_next = browser.content
                 pattern_next = '<a href="([^"]+)" title="[^"]+" class="btn-torrent" target="_blank">'
                 # Con el patron anterior obtengo <a href="http://tumejorjuego.com/download/index.php?link=descargar-torrent/058310_yo-frankenstein-blurayrip-ac3-51.html" title="Descargar torrent de Yo Frankenstein " class="btn-torrent" target="_blank">Descarga tu Archivo torrent!</a>
                 
                 link =re.findall(pattern_next,data_next)
                 link_url = link[0]
-                if link_url[len(link_url)] <> "/": link_url = link_url + "/"
-                provider.log.info('Link : ' + link_url)
-                partes = link[0].split("/")
+                provider.log.info('Link : ' + link_url) 
+                provider.log.info('Longitud : '+ str(len(link_url)))
+                provider.log.info('Ultimo caracter : ' + link_url[len(link_url)-1])
+                if link_url[len(link_url)-1] <> "/": link_url = link_url + "/"
+                
+                partes = link_url.split("/")
                 cadena = partes[ len(partes)-2 ]
                 torrent = cadena.split("_")
-                print torrent
+                provider.log.info(torrent)
                 provider.log.info('Torrent : ' + torrent[0])
                 cadena = torrent[1].split(".")
                 titulo = cadena[0]
@@ -60,12 +63,13 @@ def extract_torrents(data, query):
                 titulo = titulo + ' - ' + fecha + " - " +  tam + " - " + settings.name_provider
                 
                 if filters.verify(titulo, None):
-                    yield {"name": titulo, "uri": link[0]}  # devuelve el torrent
+                    yield {"name": titulo, "uri": link_url}  # devuelve el torrent
                     cont += 1
                 else:
                     provider.log.warning(filters.reason)
                 if cont == settings.max_magnets:  # limit magnets
                     break  
+            if nombre_largo <> query.replace('+','-'): provider.log.info('No se contabliza : nombre_largo: ' + nombre_largo + ' y query : ' + query)
             last_item = item
           # Elimina los comentarios que haya ('<!--(.*?)-->')
           if pagina == 2: break
@@ -76,7 +80,7 @@ def extract_torrents(data, query):
             provider.log.info("Siguiente enlace de paginacion : " + url_next_page)
             browser.content = ''
             browser.open(url_next_page)
-            print browser.status
+            provider.log.info('Status of browser request : ' + str(browser.status))
             if "Next" in browser.content: provider.log.info('<<<<<<<<<<<<ERORRRRR>>>>>>>>>>>>>>>>>>>>>>')
             datos_lista = ''
             datos_lista = browser.content
