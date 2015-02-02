@@ -31,7 +31,7 @@ def extract_torrents(data, query):
           for cm,(item,fecha,tam) in enumerate(re.findall(pattern, datos_lista)): #http://www.newpct1.com/descarga-torrent/peliculas/carretera-perdida-1997--en--blurayrip-ac3-5-1--peliculas
             nombre_largo = item.split("/")[4]
             provider.log.info("Nombre largo: " + nombre_largo)
-            if last_item != item and nombre_largo == query.replace('+','-'):
+            if last_item != item and query.replace('+','-') in nombre_largo:
                 provider.log.info('Item url : ' + item) 
                 next_url = item.replace(".com/",".com/descarga-torrent/")
                 next_url = next_url.replace('"','')
@@ -69,7 +69,7 @@ def extract_torrents(data, query):
                     provider.log.warning(filters.reason)
                 if cont == settings.max_magnets:  # limit magnets
                     break  
-            if nombre_largo <> query.replace('+','-'): provider.log.info('No se contabliza : nombre_largo: ' + nombre_largo + ' y query : ' + query)
+            if query.replace('+','-') not in nombre_largo: provider.log.info('No se contabliza : nombre_largo: ' + nombre_largo + ' y query : ' + query)
             last_item = item
           # Elimina los comentarios que haya ('<!--(.*?)-->')
           if pagina == 2: break
